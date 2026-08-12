@@ -1,9 +1,11 @@
 import { Router } from "express";
-import nodemailer from "nodemailer";
+import { Resend } from "resend";
 import Contact from "../models/Contact.js";
 import { required } from "../middleware/validate.js";
 
 const router = Router();
+
+const resend = new Resend(process.env.RESEND_API_KEY);
 
 router.post(
   "/",
@@ -16,28 +18,8 @@ router.post(
     try {
       const { name, email, subject, message } = req.body;
 
-      // 1. Check environment variables
-      console.log("Checking SMTP configuration...");
-
-      console.log("SMTP_HOST:", process.env.SMTP_HOST);
-      console.log("SMTP_PORT:", process.env.SMTP_PORT);
-      console.log("SMTP_USER:", process.env.SMTP_USER);
-      console.log(
-        "SMTP_PASS exists:",
-        Boolean(process.env.SMTP_PASS)
-      );
-      console.log(
-        "CONTACT_TO_EMAIL:",
-        process.env.CONTACT_TO_EMAIL
-      );
-
-      if (
-        !process.env.SMTP_HOST ||
-        !process.env.SMTP_USER ||
-        !process.env.SMTP_PASS ||
-        !process.env.CONTACT_TO_EMAIL
-      ) {
-        console.error("❌ SMTP configuration is missing");
+      if (!process.env.RESEND_API_KEY) {
+        console.error("❌ RESEND_API_KEY is missing");
 
         return res.status(500).json({
           success: false,
@@ -45,9 +27,16 @@ router.post(
         });
       }
 
-      // 2. Save message to MongoDB
-      console.log("Saving contact message to MongoDB...");
+      if (!process.env.CONTACT_TO_EMAIL) {
+        console.error("❌ CONTACT_TO_EMAIL is missing");
 
+        return res.status(500).json({
+          success: false,
+          message: "Contact email is not configured",
+        });
+      }
+
+      // Save contact message to MongoDB
       const item = await Contact.create({
         name,
         email,
@@ -57,32 +46,10 @@ router.post(
 
       console.log("✅ Message saved:", item._id);
 
-      // 3. Create Nodemailer transporter
-      console.log("Creating email transporter...");
-
-      const transporter = nodemailer.createTransport({
-        host: process.env.SMTP_HOST,
-        port: Number(process.env.SMTP_PORT || 587),
-        secure: Number(process.env.SMTP_PORT || 587) === 465,
-        auth: {
-          user: process.env.SMTP_USER,
-          pass: process.env.SMTP_PASS,
-        },
-      });
-
-      // 4. Verify Gmail SMTP
-      console.log("Verifying Gmail SMTP connection...");
-
-      await transporter.verify();
-
-      console.log("✅ SMTP connection verified");
-
-      // 5. Send email
-      console.log("Sending email...");
-
-      const info = await transporter.sendMail({
-        from: `"Portfolio Contact" <${process.env.SMTP_USER}>`,
-        to: process.env.CONTACT_TO_EMAIL,
+      // Send email through Resend
+      const { data, error } = await resend.emails.send({
+        from: "Portfolio <onboarding@resend.dev>",
+        to: [process.env.CONTACT_TO_EMAIL],
         replyTo: email,
         subject: subject || `Portfolio contact from ${name}`,
         text: `
@@ -95,8 +62,17 @@ ${message}
         `,
       });
 
+      if (error) {
+        console.error("❌ Resend error:", error);
+
+        return res.status(500).json({
+          success: false,
+          message: error.message || "Email could not be sent",
+        });
+      }
+
       console.log("✅ EMAIL SENT!");
-      console.log("Message ID:", info.messageId);
+      console.log("Resend ID:", data?.id);
 
       return res.status(201).json({
         success: true,
@@ -104,12 +80,7 @@ ${message}
         id: item._id,
       });
     } catch (error) {
-      console.error("\n❌❌❌ CONTACT ERROR ❌❌❌");
-      console.error("Name:", error.name);
-      console.error("Message:", error.message);
-      console.error("Code:", error.code);
-      console.error("Full error:", error);
-      console.error("============================================\n");
+      console.error("❌ CONTACT ERROR:", error);
 
       return res.status(500).json({
         success: false,
