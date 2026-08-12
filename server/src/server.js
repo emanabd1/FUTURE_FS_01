@@ -5,6 +5,7 @@ import dotenv from "dotenv";
 import connectDB from "./config/db.js";
 import chatRoutes from "./routes/chatRoutes.js";
 import contactRoutes from "./routes/contact.js";
+import projectRoutes from "./routes/projects.js";
 
 dotenv.config();
 
@@ -67,6 +68,12 @@ app.use("/api/chat", chatRoutes);
 // -------------------------
 
 app.use("/api/contact", contactRoutes);
+
+// -------------------------
+// Projects
+// -------------------------
+
+app.use("/api/projects", projectRoutes);
 
 // -------------------------
 // 404
