@@ -5,6 +5,7 @@ import dotenv from "dotenv";
 import connectDB from "./config/db.js";
 import chatRoutes from "./routes/chatRoutes.js";
 
+
 dotenv.config();
 
 const app = express();
