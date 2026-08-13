@@ -1,0 +1,8 @@
+[
+{"title":"Profile","tags":["about","profile","developer"],"content":"I am a full-stack development learner and UI/UX designer building practical web applications with React, Vite, Node.js, Express and MongoDB. I enjoy creating clean, modern and usable products."},
+{"title":"Projects","tags":["projects","portfolio","work"],"content":"Projects include a To-Do app, Task Manager, RAG AI Chatbot, Job Sphere, Bootcamp Management System, Role-Based Management System, Color Palette project, Toggle project and Social Proof Section. I have also worked on React portfolio/blog style applications."},
+{"title":"UX and UI Work","tags":["ux","ui","figma","daily ui","wireframe","case study"],"content":"My design work includes Daily UI challenges 1-30, wireframes and a UX case study. I focus on modern, human-looking interfaces, clear hierarchy, responsive layouts and practical interaction design."},
+{"title":"Certificates","tags":["certificate","certifications"],"content":"Certificates include Full-Stack Development by CSEC, Data Literacy and AI Literacy."},
+{"title":"Technology","tags":["react","vite","node","express","mongodb","javascript","tailwind"],"content":"Frontend: React with Vite and JavaScript. Backend: Node.js with Express. Database: MongoDB. UI work can use Tailwind CSS and component libraries where appropriate."},
+{"title":"Career Goals","tags":["goal","career","job","freelance"],"content":"The portfolio is being built as a professional digital resume and proof of work for recruiters, clients and hiring managers, aligned with the Future Interns Full Stack Web Development Task 1."}
+]
