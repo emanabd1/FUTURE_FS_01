@@ -4,7 +4,7 @@ import dotenv from "dotenv";
 
 import connectDB from "./config/db.js";
 import chatRoutes from "./routes/chatRoutes.js";
-
+import contactRoutes from "./routes/contact.js";
 
 dotenv.config();
 
@@ -31,7 +31,6 @@ app.use(
 );
 
 app.use(express.json());
-
 app.use(express.urlencoded({ extended: true }));
 
 // -------------------------
@@ -62,6 +61,12 @@ app.get("/api/health", (req, res) => {
 // -------------------------
 
 app.use("/api/chat", chatRoutes);
+
+// -------------------------
+// Contact
+// -------------------------
+
+app.use("/api/contact", contactRoutes);
 
 // -------------------------
 // 404
