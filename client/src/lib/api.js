@@ -24,7 +24,7 @@ export async function chat(message) {
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
-      question: message,
+      message,
     }),
   });
 
@@ -59,6 +59,16 @@ export async function contact(payload) {
 
 export async function healthCheck() {
   return request(`${API_URL}/health`, {
+    method: "GET",
+  });
+}
+
+// ------------------------------------
+// Projects
+// ------------------------------------
+
+export async function getProjects() {
+  return request(`${API_URL}/projects`, {
     method: "GET",
   });
 }
