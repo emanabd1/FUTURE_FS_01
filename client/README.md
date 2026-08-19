@@ -4,8 +4,7 @@ Run:
 1. npm install
 2. npm run dev
 
-Backend default: http://localhost:5000/api
-Optional frontend .env: VITE_API_URL=http://localhost:5000/api
+
 
 Images:
 - public/profile.png
