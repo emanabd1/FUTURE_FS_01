@@ -12,4 +12,3 @@ Images:
 - public/certificates/data-literacy.png
 - public/certificates/ai-literacy.png
 
-Replace project github/demo placeholders in src/lib/data.js when individual links are provided.
