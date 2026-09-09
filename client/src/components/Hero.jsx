@@ -119,7 +119,7 @@ export default function Hero() {
 
       </div>
 
-      {/* Scroll Button */}
+
       <button
         className="scroll"
         onClick={() => go('about')}
