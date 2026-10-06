@@ -3,10 +3,7 @@ import portfolioData from "../data/portfolioData.js";
 
 const router = express.Router();
 
-/*
-  Calculate how relevant each portfolio document
-  is to the user's question.
-*/
+
 function calculateScore(question, document) {
   const text = `
     ${document.title}
